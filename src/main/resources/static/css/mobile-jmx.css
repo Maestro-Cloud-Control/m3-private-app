@@ -1,0 +1,235 @@
+/*2125*/
+html, body {
+    height: 100%;
+    min-width: 1000px;
+    min-height: 300px;
+    overflow: auto;
+}
+/*2138*/
+a {
+    color: #333;
+    cursor: pointer;
+}
+/*2131*/
+body {
+    overflow: hidden;
+    margin: 0;
+    font: 12px source_sans_prolight,sans-serif;
+    text-align: left;
+    background: #fff;
+}
+/*2173*/
+#mainMenu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgb(70,69,71);
+    text-align: left;
+    z-index: 2;
+    min-width: 1000px;
+}
+/*2184*/
+#mainMenu .mainMenuInner {
+    display: inline;
+}
+/*2186*/
+#mainMenu .login {
+    float: right;
+    color: #fff;
+    position: relative;
+}
+/*2191*/
+#mainMenu .login p {
+    margin: 0 10px 0 5px;
+    font-size: 14px;
+    line-height: 40px;
+    white-space: nowrap;
+}
+/*2198*/
+#mainMenu .login p, #mainMenu .login .logged div {
+    display: inline-block;
+    vertical-align: top;
+}
+/*2199*/
+#mainMenu .login p, #mainMenu .login .logged div {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/*2225*/
+#mainMenu .login a.logout {
+    vertical-align: middle;
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    overflow: hidden;
+    text-align: center;
+    text-indent: 100%;
+    position: relative;
+    background: #39c2d7;
+}
+/*2238*/
+#mainMenu .login a.logout:before {
+    position: absolute;
+    border: 2px solid #fff;
+    border-radius: 20px;
+    height: 12px;
+    width: 12px;
+    display: block;
+    content: '';
+    top: 11px;
+    left: 12px;
+}
+/*2249*/
+#mainMenu .login a.logout:after {
+    position: absolute;
+    border: solid #39c2d7;
+    border-width: 0 3px;
+    background: #fff;
+    border-radius: 4px;
+    height: 10px;
+    width: 2px;
+    display: block;
+    content: '';
+    top: 11px;
+    left: 16px;
+}
+/*2266*/
+#mainMenu .login .learn-more {
+    display: inline-block;
+    margin-right: 10px;
+}
+/*2270*/
+#mainMenu .login .learn-more a {
+    display: inline-block;
+    padding: 10px 15px 5px;
+    margin: -5px 0 0;
+    font: bold 13px/20px source_sans_proregular,sans-serif;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    background-color: #39c2d7;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 0;
+    -webkit-border-radius: 0 0 10px 10px;
+    border-radius: 0 0 10px 10px;
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.25);
+    box-shadow: 0 0 5px rgba(0,0,0,.25);
+    text-shadow: 0 1px 2px rgba(0,0,0,.5);
+}
+/*2424*/
+.pageContent {
+    position: absolute;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    overflow: hidden;
+    min-width: 1000px;
+}
+/*3871*/
+#reporting #mainMenu {
+    background: none;
+}
+/*3904*/
+#reporting {
+    min-width: 1000px;
+}
+/*3905*/
+#reporting .pageHolder {
+    background: transparent;
+}
+/*3906*/
+#reporting .pageContent {
+    overflow: auto;
+}
+/*3942*/
+#reporting .table-holder {
+    width: auto;
+    margin: 0 auto;
+    max-width: 1000px;
+    padding: 0;
+}
+/*3948*/
+#reporting .holder-text {
+    margin: 10px 0 15px;
+    font: 13px source_sans_proregular,sans-serif;
+}
+#reporting .holder-text-phone {
+    display: none;
+}
+/*3982*/
+#reporting #mainMenu .login {
+    color: #464547;
+}
+
+#reporting .logoText {
+    color: #315973;
+    font: 20px/42px source_sans_prolight,sans-serif;
+    padding-right: 10px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+#reporting .logo {
+    background: url("/img/logo-email-metro.png") no-repeat scroll 0 0;
+    color: #315973;
+    font: 20px/22px source_sans_prolight,sans-serif;
+    padding: 15px 0 0 60px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    float: left;
+    height: 25px;
+}
+
+.links_block {
+    float: right;
+    margin: 19px 0 0;
+}
+
+.links_block a {
+    color: #315973;
+    margin: 0 3px;
+    text-decoration: none;
+    font: 13px source_sans_proregular,sans-serif;
+}
+
+@media only screen and (max-device-width: 1024px) {
+
+     html, body {
+         min-width: 768px;
+         min-height: 300px;
+     }
+
+     #mainMenu {
+         position: absolute;
+         top: 0;
+         left: 0;
+         right: 0;
+         height: 60px;
+         background: rgb(70,69,71);
+         text-align: left;
+         z-index: 2;
+         min-width: 768px;
+     }
+     .pageContent {
+         position: absolute;
+         top: 60px;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         z-index: 0;
+         overflow: hidden;
+         min-width: 768px;
+     }
+    #reporting {
+        min-width: 768px;
+    }
+    #reporting .table-holder {
+        width: auto;
+        margin: 0 auto;
+        padding: 0 10px;
+    }
+}

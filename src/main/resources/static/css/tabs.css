@@ -1,0 +1,61 @@
+/* 22 */
+.tabsContent{
+    background: none repeat scroll 0 0 #315973;
+    list-style: none outside none;
+    margin: 5px 0 0;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+}
+.tabsContent li{
+    float: left;
+    margin: 0 5px;
+    padding: 8px 5px 7px;
+}
+.tabsContent li.current,
+.tabsContent li:hover {
+    border-bottom: 3px solid #FFA200;
+    margin: 5px 5px 0;
+    padding: 3px 5px 4px;
+}
+.tabsContent li a{
+    color: #fff;
+    margin: 0 0 0 4px;
+    text-decoration: none;
+    float:left;
+    text-transform: uppercase;
+}
+.tabsContent li a:hover {background: none;}
+.holder-tabs{
+    clear: both;
+    width: 100%;
+}
+.tabsContent li:before{
+    color: #fff;
+    content: ">";
+    cursor: default;
+    display: inline-block;
+    font: 17px/16px source_sans_prolight,sans-serif;
+    text-align: left;
+    vertical-align: top;
+    width: 5px;
+    float:left;
+}
+.holder-tabs .error{color:red;}
+.tabsContent span.error{
+    background: url("/maestro2/img/icon-error.png") no-repeat scroll -224px -2px;
+    height: 15px;
+    width: 18px;
+    float:left;
+}
+
+.logOutBtn {
+    background: #315973;
+    color: #fff;
+    border: none;
+    padding: 8px;
+    box-shadow: 1px 1px 3px #000;
+    top: 20px;
+    right: 30px;
+    position: absolute;
+}
