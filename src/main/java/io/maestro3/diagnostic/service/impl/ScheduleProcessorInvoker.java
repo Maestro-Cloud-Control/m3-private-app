@@ -46,15 +46,14 @@ public class ScheduleProcessorInvoker implements IScheduleProcessorInvoker {
     }
 
     @Override
-    public void invoke(String scheduleOperation, boolean async) throws InvalidParameterException {
-        ScheduleOperation operation = ScheduleOperation.fromValue(scheduleOperation);
+    public void invoke(ScheduleOperation operation, boolean async) throws InvalidParameterException {
         if (operation == null) {
-            throw new InvalidParameterException("Cannot find schedule operation with name: " + scheduleOperation);
+            throw new InvalidParameterException("Cannot find schedule operation with name: " + operation);
         }
 
         // ONLY ONE SCHEDULER PER TIME CAN BE EXECUTED VIA THIS POINT !!!
         if (callExecutor.getActiveCount() != 0) {
-            throw new InvalidParameterException(" Cannot execute " + scheduleOperation + " scheduler. Other scheduler IN PROGRESS.");
+            throw new InvalidParameterException(" Cannot execute " + operation + " scheduler. Other scheduler IN PROGRESS.");
         }
         // do processing
         Runnable runnableTask;
@@ -64,7 +63,7 @@ public class ScheduleProcessorInvoker implements IScheduleProcessorInvoker {
                 break;
             default:
                 throw new InvalidParameterException("Operation is not supported for manual invocation: " +
-                        scheduleOperation + ". Allowed schedulers: " + ScheduleOperation.getAllScheduleOperations());
+                        operation + ". Allowed schedulers: " + ScheduleOperation.getAllScheduleOperations());
         }
 
         if (async) {

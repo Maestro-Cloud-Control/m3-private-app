@@ -158,7 +158,7 @@ public class DiagnosticPageManager implements IDiagnosticPageManager {
     }
 
     @Override
-    public String invokeOperation(String scheduleOperation) {
+    public String invokeOperation(ScheduleOperation scheduleOperation) {
         String result = "Ok";
         LOG.info("Manual JMX schedule invoker");
         try {

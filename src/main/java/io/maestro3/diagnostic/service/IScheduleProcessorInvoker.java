@@ -17,10 +17,12 @@
 
 package io.maestro3.diagnostic.service;
 
+import io.maestro3.diagnostic.model.ScheduleOperation;
+
 import java.security.InvalidParameterException;
 
 public interface IScheduleProcessorInvoker {
 
-    void invoke(String scheduleOperation, boolean async) throws InvalidParameterException;
+    void invoke(ScheduleOperation scheduleOperation, boolean async) throws InvalidParameterException;
 
 }

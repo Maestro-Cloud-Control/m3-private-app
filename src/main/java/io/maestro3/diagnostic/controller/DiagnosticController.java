@@ -20,6 +20,7 @@ package io.maestro3.diagnostic.controller;
 import io.maestro3.diagnostic.manager.IDiagnosticPageManager;
 import io.maestro3.diagnostic.model.EnumJMXPage;
 import io.maestro3.diagnostic.model.EnumResponseFormat;
+import io.maestro3.diagnostic.model.ScheduleOperation;
 import io.maestro3.diagnostic.model.container.JmxInfoDataContainer;
 import io.maestro3.diagnostic.model.container.MemoryInfoDataContainer;
 import io.maestro3.diagnostic.model.healthcheck.HealthCheckReport;
@@ -174,8 +175,9 @@ public class DiagnosticController {
     public ModelAndView restartOperation(@RequestParam(RESTART) String scheduleOperation,
                                          HttpServletResponse response,
                                          HttpServletRequest request) {
+        ScheduleOperation operation = ScheduleOperation.fromValue(scheduleOperation);
         ModelAndView model;
-        String result = manager.invokeOperation(scheduleOperation);
+        String result = manager.invokeOperation(operation);
         Map<String, Object> content = manager.getOperationsModel();
         content.put("restartMessage", result);
         model = buildJmxPageModelAndView(EnumJMXPage.OPERATIONS, request, content);

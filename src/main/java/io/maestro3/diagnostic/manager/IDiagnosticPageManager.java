@@ -17,6 +17,7 @@
 
 package io.maestro3.diagnostic.manager;
 
+import io.maestro3.diagnostic.model.ScheduleOperation;
 import io.maestro3.diagnostic.model.container.JmxInfoDataContainer;
 import io.maestro3.diagnostic.model.container.MemoryInfoDataContainer;
 import io.maestro3.diagnostic.model.container.TenantDataContainer;
@@ -31,7 +32,7 @@ public interface IDiagnosticPageManager {
 
     Map<String, Object> getOperationsModel();
 
-    String invokeOperation(String scheduleOperation);
+    String invokeOperation(ScheduleOperation operation);
 
     Object getJmxInfoModel(JmxInfoDataContainer data);
 
@@ -48,4 +49,5 @@ public interface IDiagnosticPageManager {
     List<TenantDataContainer> getTenantDetails();
 
     Map getInstanceRunDetails();
+
 }
