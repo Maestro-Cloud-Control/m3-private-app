@@ -112,7 +112,7 @@ public class OpenstackSetTenantDescriberModeCommand extends AbstractAdminCommand
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("REGION_ALIAS", params.getRegionAlias());
         placeholders.put("TENANT_ALIAS", params.getTenantAlias());
-        placeholders.put("MODE", params.isDescribeAll() ? "ALL" : "OUR");
+        placeholders.put("MODE", params.isDescribeAll() ? "13/ALL" : "OUR");
         return new SdkAdminCommand().setType(getType().name()).setCommand(ConsoleCommandTokenizer.tokenize(template, placeholders));
     }
 
