@@ -28,6 +28,10 @@ import io.maestro3.agent.admin.model.ServiceTenantDto;
 import io.maestro3.agent.admin.model.ShapeConfigDto;
 import io.maestro3.agent.admin.model.TenantDto;
 import io.maestro3.agent.admin.model.UserInfoDto;
+import io.maestro3.agent.admin.model.security.request.ConfigureSecurityModeRequest;
+import io.maestro3.agent.admin.model.security.request.DeleteSecurityModeRequest;
+import io.maestro3.agent.admin.model.security.request.DescribeSecurityModesRequest;
+import io.maestro3.agent.admin.model.security.request.SetSecurityModeRequest;
 import io.maestro3.agent.amqp.router.IAmqpRoutingService;
 import io.maestro3.agent.dao.IOpenStackRegionRepository;
 import io.maestro3.agent.model.AdminProjectMeta;
@@ -43,6 +47,7 @@ import io.maestro3.sdk.internal.signer.IM3Signer;
 import io.maestro3.sdk.internal.util.JsonUtils;
 import io.maestro3.sdk.v3.request.agent.ConfigureTenantNetworkRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -83,8 +88,8 @@ public class OpenStackAdminController {
     public AdminSdkResponse getRegionsInfo() {
         Collection<OpenStackRegionConfig> regions = regionService.findAllRegionsForCloud();
         List<RegionConfigDto> regionConfigDtos = regions.stream()
-            .map(RegionConfigDto::new)
-            .collect(Collectors.toList());
+                .map(RegionConfigDto::new)
+                .collect(Collectors.toList());
         return AdminSdkResponse.of(regionConfigDtos);
     }
 
@@ -138,7 +143,7 @@ public class OpenStackAdminController {
                                             @PathVariable("regionAlias") String regionAlias,
                                             @RequestBody String body) {
         String decryptedBody = signer.decrypt(body, authKey);
-        IAdminCommand<UserInfoDto> command = adminCommandFactory.getCommand(AdminCommandType.OPEN_STACK_CREATE_REGION);
+        IAdminCommand<UserInfoDto> command = adminCommandFactory.getCommand(AdminCommandType.OPEN_STACK_SET_USER);
         UserInfoDto model = command.getParams(decryptedBody, regionAlias);
         return command.execute(model);
     }
@@ -195,9 +200,9 @@ public class OpenStackAdminController {
         }
         EntityValidator.validate(configDto);
         RabbitNotificationConfig rabbitNotificationConfig = configDto.toNotificationConfig(
-            routerService.getOpenStackNovaNotificationsQueue(),
-            routerService.getOpenStackCinderNotificationsQueue(),
-            routerService.getOpenStackGlanceNotificationsQueue()
+                routerService.getOpenStackNovaNotificationsQueue(),
+                routerService.getOpenStackCinderNotificationsQueue(),
+                routerService.getOpenStackGlanceNotificationsQueue()
         );
         existingRegion.setRabbitNotificationConfig(rabbitNotificationConfig);
         regionService.save(existingRegion);
@@ -211,9 +216,9 @@ public class OpenStackAdminController {
             throw new IllegalStateException("ERROR: Region with specified alias is not exist. Received name " + regionAlias);
         }
         List<ImageDto> images = dbServicesProvider.getMachineImageDbService().findByRegionId(existingRegion.getId())
-            .stream()
-            .map(i -> new ImageDto(i, regionAlias))
-            .collect(Collectors.toList());
+                .stream()
+                .map(i -> new ImageDto(i, regionAlias))
+                .collect(Collectors.toList());
         return AdminSdkResponse.of(images);
     }
 
@@ -244,9 +249,9 @@ public class OpenStackAdminController {
             throw new IllegalStateException("ERROR: Region with specified alias is not exist. Received name " + regionAlias);
         }
         List<ShapeConfigDto> flavorConfigs = existingRegion.getAllowedShapes()
-            .stream()
-            .map(ShapeConfigDto::new)
-            .collect(Collectors.toList());
+                .stream()
+                .map(ShapeConfigDto::new)
+                .collect(Collectors.toList());
         return AdminSdkResponse.of(flavorConfigs);
     }
 
@@ -267,9 +272,9 @@ public class OpenStackAdminController {
             throw new IllegalStateException("ERROR: Region with specified alias is not exist. Received name " + regionAlias);
         }
         Collection<TenantDto> tenantConfigs = dbServicesProvider.getTenantDbService().findAllByRegion(existingRegion.getId())
-            .stream()
-            .map(TenantDto::new)
-            .collect(Collectors.toList());
+                .stream()
+                .map(TenantDto::new)
+                .collect(Collectors.toList());
         return AdminSdkResponse.of(tenantConfigs);
     }
 
@@ -294,7 +299,7 @@ public class OpenStackAdminController {
         TenantDbService tenantDbService = dbServicesProvider.getTenantDbService();
         String regionId = existingRegion.getId();
         OpenStackTenant existingTenant = tenantDbService
-            .findOpenStackTenantByNameAndRegion(tenantAlias, regionId);
+                .findOpenStackTenantByNameAndRegion(tenantAlias, regionId);
         return AdminSdkResponse.of(existingTenant == null ? null : new TenantDto(existingTenant));
     }
 
@@ -307,7 +312,7 @@ public class OpenStackAdminController {
         }
         TenantDbService tenantDbService = dbServicesProvider.getTenantDbService();
         OpenStackTenant existingTenant = tenantDbService
-            .findOpenStackTenantByNameAndRegion(tenantAlias, existingRegion.getId());
+                .findOpenStackTenantByNameAndRegion(tenantAlias, existingRegion.getId());
         if (existingTenant == null) {
             throw new IllegalStateException("ERROR: Tenant with specified alias is not exist. Received name " + tenantAlias);
         }
@@ -339,12 +344,51 @@ public class OpenStackAdminController {
 
     @PostMapping("/{regionAlias}/tenant/{tenantAlias}/network/configure")
     public AdminSdkResponse configureTenantNetwork(@RequestHeader(M3SdkConstants.ACCESS_KEY_HEADER) String authKey,
-                                                      @PathVariable("tenantAlias") String tenantAlias,
-                                                      @PathVariable("regionAlias") String regionAlias,
-                                                      @RequestBody String body) {
+                                                   @PathVariable("tenantAlias") String tenantAlias,
+                                                   @PathVariable("regionAlias") String regionAlias,
+                                                   @RequestBody String body) {
         String decryptedBody = signer.decrypt(body, authKey);
         IAdminCommand<ConfigureTenantNetworkRequest> command = adminCommandFactory.getCommand(AdminCommandType.OPEN_STACK_CONFIGURE_TENANT_NETWORK);
         ConfigureTenantNetworkRequest model = command.getParams(decryptedBody, regionAlias, tenantAlias);
         return command.execute(model);
+    }
+
+    @PostMapping("/{regionAlias}/network/security")
+    public AdminSdkResponse configureSecurityMode(@RequestHeader(M3SdkConstants.ACCESS_KEY_HEADER) String authKey,
+                                                  @PathVariable("regionAlias") String regionAlias,
+                                                  @RequestBody String body) {
+        String decryptedBody = signer.decrypt(body, authKey);
+        IAdminCommand<ConfigureSecurityModeRequest> command = adminCommandFactory.getCommand(AdminCommandType.OPEN_STACK_CONFIGURE_SECURITY_MODE);
+        ConfigureSecurityModeRequest request = command.getParams(decryptedBody, regionAlias);
+        return command.execute(request);
+    }
+
+    @DeleteMapping("/{regionAlias}/network/security")
+    public AdminSdkResponse deleteSecurityMode(@RequestHeader(M3SdkConstants.ACCESS_KEY_HEADER) String authKey,
+                                               @PathVariable("regionAlias") String regionAlias,
+                                               @RequestBody String body) {
+        String decryptedBody = signer.decrypt(body, authKey);
+        IAdminCommand<DeleteSecurityModeRequest> command = adminCommandFactory.getCommand(AdminCommandType.OPEN_STACK_DELETE_SECURITY_MODE);
+        DeleteSecurityModeRequest request = command.getParams(decryptedBody, regionAlias);
+        return command.execute(request);
+    }
+
+    @GetMapping("/network/security")
+    public AdminSdkResponse describeSecurityModes(@RequestHeader(M3SdkConstants.ACCESS_KEY_HEADER) String authKey,
+                                                  @RequestBody String body) {
+        String decryptedBody = signer.decrypt(body, authKey);
+        IAdminCommand<DescribeSecurityModesRequest> command = adminCommandFactory.getCommand(AdminCommandType.OPEN_STACK_DESCRIBE_SECURITY_MODES);
+        DescribeSecurityModesRequest request = command.getParams(decryptedBody);
+        return command.execute(request);
+    }
+
+    @PostMapping("/{regionAlias}/tenant/network/security")
+    public AdminSdkResponse setSecurityMode(@RequestHeader(M3SdkConstants.ACCESS_KEY_HEADER) String authKey,
+                                            @PathVariable("regionAlias") String regionAlias,
+                                            @RequestBody String body) {
+        String decryptedBody = signer.decrypt(body, authKey);
+        IAdminCommand<SetSecurityModeRequest> command = adminCommandFactory.getCommand(AdminCommandType.OPEN_STACK_SET_SECURITY_MODE);
+        SetSecurityModeRequest request = command.getParams(decryptedBody, regionAlias);
+        return command.execute(request);
     }
 }

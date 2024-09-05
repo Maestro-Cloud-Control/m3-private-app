@@ -24,6 +24,7 @@ import io.maestro3.agent.admin.model.EntityValidator;
 import io.maestro3.agent.admin.model.TenantDto;
 import io.maestro3.agent.dao.IOpenStackRegionRepository;
 import io.maestro3.agent.model.base.TenantState;
+import io.maestro3.agent.model.network.SecurityModeConfiguration;
 import io.maestro3.agent.model.region.OpenStackRegionConfig;
 import io.maestro3.agent.model.tenant.OpenStackTenant;
 import io.maestro3.agent.service.DbServicesProvider;
@@ -36,6 +37,7 @@ import io.maestro3.sdk.v3.model.agent.wizard.SdkAdminCommand;
 import io.maestro3.sdk.v3.model.agent.wizard.SdkPrivateStep;
 import io.maestro3.sdk.v3.model.agent.wizard.SdkPrivateWizard;
 import io.maestro3.sdk.v3.model.agent.wizard.item.SdkOptionItem;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -82,7 +84,7 @@ public class OpenstackCreateTenantCommand extends AbstractAdminCommand<TenantDto
         String groupName = groupItem.getTitle();
         String groupId = groupItem.getValue();
 
-        return new TenantDto(projectId, networkId, projectName, groupId, groupName, tenantName, projectDomain, regionName);
+        return new TenantDto(projectId, networkId, projectName, groupId, groupName, null, tenantName, projectDomain, regionName);
     }
 
     @Override
@@ -96,22 +98,37 @@ public class OpenstackCreateTenantCommand extends AbstractAdminCommand<TenantDto
         TenantDbService tenantDbService = dbServicesProvider.getTenantDbService();
         String regionId = existingRegion.getId();
         OpenStackTenant existingTenant = tenantDbService
-            .findOpenStackTenantByNameAndRegion(tenantDto.getNameAlias(), regionId);
+                .findOpenStackTenantByNameAndRegion(tenantDto.getNameAlias(), regionId);
         if (existingTenant != null) {
             throw new IllegalStateException("ERROR: Tenant with specified alias already exist. Received name " + tenantDto.getNameAlias());
         }
         OpenStackTenant config = tenantDto.toTenantConfig(regionId);
         config.setTenantState(TenantState.AVAILABLE);
+        setSecurityMode(config, existingRegion, tenantDto.getSecurityMode());
         tenantDbService.save(config);
         return AdminSdkResponse.of("Tenant was successfully added to region " + regionAlias);
+    }
+
+    private void setSecurityMode(OpenStackTenant tenant, OpenStackRegionConfig region, String modeName) {
+        Map<String, SecurityModeConfiguration> configurations = region.getSecurityModeConfigurations();
+        if (StringUtils.isNotBlank(modeName)) {
+            if (!configurations.containsKey(modeName)) {
+                throw new IllegalStateException(String.format("Security mode %s is not configured for region %s",
+                        modeName, region.getRegionAlias()));
+            }
+            tenant.setSecurityMode(modeName);
+        } else {
+            region.getDefaultSecurityModeConfiguration()
+                    .ifPresent(configuration -> tenant.setSecurityMode(configuration.getName()));
+        }
     }
 
     @Override
     public SdkAdminCommand prepareCommand(TenantDto params) {
         String template = "m3admin private openstack create_tenant --region_alias ${REGION_ALIAS} --native_id ${NATIVE_ID}" +
-            " --network_id ${NETWORK_ID} --domain ${DOMAIN_NAME}" +
-            " --native_name ${NATIVE_NAME} --name_alias ${NAME_ALIAS}" +
-            " --security_group ${SECURITY_GROUP_NAME} --security_group_id ${SECURITY_GROUP_ID}";
+                " --network_id ${NETWORK_ID} --domain ${DOMAIN_NAME}" +
+                " --native_name ${NATIVE_NAME} --name_alias ${NAME_ALIAS}" +
+                " --security_group ${SECURITY_GROUP_NAME} --security_group_id ${SECURITY_GROUP_ID} ";
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("REGION_ALIAS", params.getRegionAlias());
         placeholders.put("NATIVE_ID", params.getNativeId());
@@ -121,6 +138,10 @@ public class OpenstackCreateTenantCommand extends AbstractAdminCommand<TenantDto
         placeholders.put("NAME_ALIAS", params.getNameAlias());
         placeholders.put("SECURITY_GROUP_NAME", params.getSecurityGroupName());
         placeholders.put("SECURITY_GROUP_ID", params.getSecurityGroupId());
+        if (StringUtils.isNotBlank(params.getSecurityMode())) {
+            template += " --security_mode ${SECURITY_MODE}";
+            placeholders.put("SECURITY_MODE", params.getSecurityMode());
+        }
         return new SdkAdminCommand().setType(getType().name()).setCommand(ConsoleCommandTokenizer.tokenize(template, placeholders));
     }
 

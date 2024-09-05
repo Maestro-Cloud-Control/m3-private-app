@@ -17,6 +17,9 @@
 
 package io.maestro3.agent.admin.model;
 
+import io.maestro3.agent.admin.model.security.request.ConfigureSecurityModeRequest;
+import io.maestro3.agent.admin.model.security.request.DeleteSecurityModeRequest;
+import io.maestro3.agent.admin.model.security.request.SetSecurityModeRequest;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -39,6 +42,7 @@ public class EntityValidator {
             throw new IllegalStateException("ERROR: Region number should be 0 or more");
         }
     }
+
     public static void validate(ShapeConfigDto configDto) {
         if (StringUtils.isBlank(configDto.getNativeId())) {
             throw new IllegalStateException("ERROR: Native id should be specified ");
@@ -204,4 +208,36 @@ public class EntityValidator {
         }
     }
 
+    public static void validate(ConfigureSecurityModeRequest request) {
+        validateBaseSecurityModeRequest(request.getRegionAlias(), request.getName());
+        if (request.isOverride()) {
+            if (StringUtils.isNotBlank(request.getAdminSecurityGroupId())) {
+                throw new IllegalStateException("ERROR: adminSecurityGroupId can not be overridden");
+            }
+        } else {
+            if (StringUtils.isBlank(request.getAdminSecurityGroupId())) {
+                throw new IllegalStateException("ERROR: adminSecurityGroupId should not be empty");
+            }
+        }
+    }
+
+    public static void validate(DeleteSecurityModeRequest request) {
+        validateBaseSecurityModeRequest(request.getRegionAlias(), request.getName());
+    }
+
+    public static void validate(SetSecurityModeRequest request) {
+        validateBaseSecurityModeRequest(request.getRegionAlias(), request.getNewModeName());
+        if (StringUtils.isNotBlank(request.getTenantAlias()) && StringUtils.isNotBlank(request.getCurrentModeName())) {
+            throw new IllegalStateException("ERROR: only one of tenantAlias and currentModeName can be specified");
+        }
+    }
+
+    private static void validateBaseSecurityModeRequest(String regionAlias, String modeName) {
+        if (StringUtils.isBlank(regionAlias)) {
+            throw new IllegalStateException("ERROR: regionAlias should not be empty");
+        }
+        if (StringUtils.isBlank(modeName)) {
+            throw new IllegalStateException("ERROR: name should not be empty");
+        }
+    }
 }
