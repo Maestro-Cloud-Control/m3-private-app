@@ -26,6 +26,7 @@ public class TenantDto extends BaseRegionDto {
     private String nativeName;
     private String securityGroupId;
     private String securityGroupName;
+    private String securityMode;
     private String nameAlias;
     private String domainName;
     private boolean managementAvailable;
@@ -34,12 +35,13 @@ public class TenantDto extends BaseRegionDto {
     }
 
     public TenantDto(String nativeId, String networkId, String nativeName, String securityGroupId, String securityGroupName,
-                     String nameAlias, String domainName, String region) {
+                     String securityMode, String nameAlias, String domainName, String region) {
         this.nativeId = nativeId;
         this.networkId = networkId;
         this.nativeName = nativeName;
         this.securityGroupId = securityGroupId;
         this.securityGroupName = securityGroupName;
+        this.securityMode = securityMode;
         this.nameAlias = nameAlias;
         this.domainName = domainName;
         this.setRegionAlias(region);
@@ -51,6 +53,7 @@ public class TenantDto extends BaseRegionDto {
         this.nativeName = tenantConfig.getNativeName();
         this.securityGroupId = tenantConfig.getSecurityGroupId();
         this.securityGroupName = tenantConfig.getSecurityGroupName();
+        this.securityMode = tenantConfig.getSecurityMode();
         this.nameAlias = tenantConfig.getTenantAlias();
         this.domainName = tenantConfig.getDomainName();
     }
@@ -114,6 +117,14 @@ public class TenantDto extends BaseRegionDto {
 
     public void setSecurityGroupName(String securityGroupName) {
         this.securityGroupName = securityGroupName;
+    }
+
+    public String getSecurityMode() {
+        return securityMode;
+    }
+
+    public void setSecurityMode(String securityMode) {
+        this.securityMode = securityMode;
     }
 
     public String getNameAlias() {
