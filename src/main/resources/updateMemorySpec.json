@@ -1,0 +1,6 @@
+{
+    "spec": {
+        "hot_add_enabled": true,
+        "size_MiB": $MEMORY_SIZE
+    }
+}

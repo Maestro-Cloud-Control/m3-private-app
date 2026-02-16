@@ -55,7 +55,7 @@ public class OpenstackSetServiceTenantCommand extends AbstractAdminCommand<Servi
 
     @Override
     public ServiceTenantDto buildRequest(SdkPrivateWizard wizard) {
-        return new ServiceTenantDto();
+        return new ServiceTenantDto();// TODO: Andreiev 8/5/2022
     }
 
     @Override

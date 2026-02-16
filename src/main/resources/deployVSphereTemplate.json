@@ -1,0 +1,11 @@
+{
+    "deployment_spec": {
+        "accept_all_EULA": true,
+        "default_datastore_id": "$PLACEMENT_DATASTORE",
+        "name": "$VM_NAME"
+    },
+    "target": {
+        "folder_id": "$PLACEMENT_FOLDER",
+        "resource_pool_id": "$PLACEMENT_RESOURCE_POOL"
+    }
+}

@@ -1,0 +1,39 @@
+{
+        "name": "$VM_NAME",
+        "placement": $PLACEMENT_DATA,
+        "cpu": {
+            "count": $CPU_COUNT,
+            "cores_per_socket": 1,
+            "hot_add_enabled": false,
+            "hot_remove_enabled": false
+        },
+        "memory": {
+            "size_MiB": $MEMORY_SIZE,
+            "hot_add_enabled": false
+        },
+        "disks": [
+            {
+                "type": "$DISK_TYPE",
+                "new_vmdk": {
+                    "name": "$DISK_NAME",
+                    "capacity": $DISK_CAPACITY
+                }
+            }
+        ],
+        "nics": $NETWORK_DATA,
+        "cdroms": [
+            {
+                "backing": {
+                    "type": "$CD_TYPE",
+                    "iso_file": "$ISO_FILE"
+                },
+                "start_connected": $CD_CONNECTED
+            }
+        ],
+        "guest_OS": "$GUEST_OS",
+        "boot_devices": [
+            {
+                "type": "CDROM"
+            }
+        ]
+}

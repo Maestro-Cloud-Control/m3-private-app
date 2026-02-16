@@ -20,6 +20,9 @@ package io.maestro3.agent.admin;
 
 public final class AdminApiConstants {
 
+    public static final String VMWARE_REGION_ENDPOINT = "/api/admin/vmware/region";
+    public static final String VSPHERE_REGION_ENDPOINT = "/api/admin/vsphere/region";
+    public static final String NUTANIX_REGION_ENDPOINT = "/api/admin/nutanix/region";
     public static final String OS_REGION_ENDPOINT = "/api/admin/openstack/region";
     public static final String SYSTEM_ENDPOINT = "/api/admin/system";
 

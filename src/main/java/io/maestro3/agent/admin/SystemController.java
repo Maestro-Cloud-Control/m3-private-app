@@ -45,6 +45,7 @@ public class SystemController {
     private final IAdminCommandFactory adminCommandFactory;
     private IPrivateAgentStateUpdater stateUpdater;
     private IM3Signer signer;
+    // TODO: 26.05.2020 Implement service for vmware image update
     private OpenStackImagesUpdater openStackImagesUpdater;
 
     @Autowired
@@ -87,6 +88,7 @@ public class SystemController {
         IAdminCommand<DescribeAllRequest> command = adminCommandFactory.getCommand(AdminCommandType.OPEN_STACK_SET_TENANT_DESCRIBER_MODE);
         DescribeAllRequest model = command.getParams(decryptedBody, regionAlias, tenantAlias);
         return command.execute(model);
+        // TODO: 15.08.2022 incorrect, create separate command
     }
 
 }

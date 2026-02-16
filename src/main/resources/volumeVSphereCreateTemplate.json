@@ -1,0 +1,9 @@
+{
+    "spec": {
+        "new_vmdk": {
+            "capacity": $DISK_SIZE_IN_BYTES,
+            "name": "$DISK_NAME"
+        },
+        "type": "SCSI"
+    }
+}

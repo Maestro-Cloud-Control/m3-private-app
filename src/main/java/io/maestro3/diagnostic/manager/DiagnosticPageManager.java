@@ -19,8 +19,8 @@ package io.maestro3.diagnostic.manager;
 
 import io.maestro3.agent.dao.IImageRepository;
 import io.maestro3.agent.dao.IInstanceRunRecordDao;
-import io.maestro3.agent.dao.IOpenStackTenantRepository;
 import io.maestro3.agent.dao.IRegionRepository;
+import io.maestro3.agent.dao.IVmWareTenantRepository;
 import io.maestro3.agent.model.base.IRegion;
 import io.maestro3.agent.model.base.ITenant;
 import io.maestro3.agent.model.base.InstanceRunRecord;
@@ -79,7 +79,7 @@ public class DiagnosticPageManager implements IDiagnosticPageManager {
 
     private DefaultUrlBuilder urlBuilder;
     private IScheduleInfoProvider scheduleService;
-    private IOpenStackTenantRepository organizationRepository;
+    private IVmWareTenantRepository organizationRepository;
     private IRegionRepository<IRegion> cloudRepository;
     private IHealthCheckService healthCheckService;
     private IInstanceRunRecordDao runRecordDao;
@@ -114,7 +114,7 @@ public class DiagnosticPageManager implements IDiagnosticPageManager {
                                  IScheduleInfoProvider scheduleService,
                                  IScheduleProcessorInvoker scheduleProcessorInvoker,
                                  IRegionRepository cloudRepository,
-                                 IOpenStackTenantRepository organizationRepository,
+                                 IVmWareTenantRepository organizationRepository,
                                  IInstanceRunRecordDao runRecordDao,
                                  Set<IImageRepository> imageRepositories) {
         this.jmxProvider = jmxProvider;

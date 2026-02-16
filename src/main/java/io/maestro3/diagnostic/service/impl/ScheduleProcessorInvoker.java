@@ -17,6 +17,9 @@
 
 package io.maestro3.diagnostic.service.impl;
 
+import io.maestro3.agent.scheduler.VAppTemplatesDescriber;
+import io.maestro3.agent.scheduler.VDCDescriber;
+import io.maestro3.agent.scheduler.VMDescriber;
 import io.maestro3.diagnostic.model.ScheduleOperation;
 import io.maestro3.diagnostic.service.IScheduleProcessorInvoker;
 import io.maestro3.diagnostic.util.MaestroThreadFactory;
@@ -41,8 +44,17 @@ public class ScheduleProcessorInvoker implements IScheduleProcessorInvoker {
                     new LinkedBlockingQueue<>(),
                     new MaestroThreadFactory("ui-schedule-invoker"));
 
+    private VDCDescriber vdcDescriber;
+    private VMDescriber vmDescriber;
+    private VAppTemplatesDescriber vAppTemplatesDescriber;
+
     @Autowired
-    ScheduleProcessorInvoker() {
+    ScheduleProcessorInvoker(VDCDescriber vdcDescriber,
+                             VMDescriber vmDescriber,
+                             VAppTemplatesDescriber vAppTemplatesDescriber) {
+        this.vdcDescriber = vdcDescriber;
+        this.vmDescriber = vmDescriber;
+        this.vAppTemplatesDescriber = vAppTemplatesDescriber;
     }
 
     @Override
@@ -58,8 +70,14 @@ public class ScheduleProcessorInvoker implements IScheduleProcessorInvoker {
         // do processing
         Runnable runnableTask;
         switch (operation) {
-            case MOCK:
-                runnableTask = () -> {};
+            case VMWARE_VDC_DESCRIBE:
+                runnableTask = () -> vdcDescriber.executeSchedule();
+                break;
+            case VMWARE_TEMPLATES_DESCRIBE:
+                runnableTask = () -> vAppTemplatesDescriber.executeSchedule();
+                break;
+            case VMWARE_VM_DESCRIBE:
+                runnableTask = () -> vmDescriber.executeSchedule();
                 break;
             default:
                 throw new InvalidParameterException("Operation is not supported for manual invocation: " +

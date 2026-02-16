@@ -51,6 +51,7 @@ public class M3ClientConfiguration {
             .withVersion(M3SdkVersion.V3)
             .withAccessKeyProvider(accessKeyProvider)
             .withCredentialsProvider(credentialsProvider)
+            // TODO: 10/19/2020 make possible to specify which requests should be sync and which async
             .async()
             .withRabbitExecutor()
             .withVirtualHost(virtualHost)

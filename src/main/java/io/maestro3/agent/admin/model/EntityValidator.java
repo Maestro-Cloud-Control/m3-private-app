@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 
+// TODO: 6/1/2020 Replace with javax validation
 public class EntityValidator {
 
     public static void validate(RegionConfigDto regionConfigDto) {

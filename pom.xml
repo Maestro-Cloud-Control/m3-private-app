@@ -22,17 +22,22 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>private-app</artifactId>
     <groupId>io.maestro3.agent</groupId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
 
 
     <properties>
         <main-class>io.maestro3.agent.app.M3AgentApplication</main-class>
         <final-name>m3-private-agent</final-name>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <private.openstack.version>1.0.0</private.openstack.version>
-        <private.core.version>1.0.0</private.core.version>
-        <spring-boot-dependencies.version>2.3.10.RELEASE</spring-boot-dependencies.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <private.openstack.version>2.0.0</private.openstack.version>
+        <private.nutanix.version>2.0.0</private.nutanix.version>
+        <private.vsphere.version>2.0.0</private.vsphere.version>
+        <private.vcloud.version>2.0.0</private.vcloud.version>
+        <private.hyperv.version>2.0.0</private.hyperv.version>
+<!--        <private.opennebula.version>2.0.0</private.opennebula.version>-->
+        <private.core.version>2.0.0</private.core.version>
+        <spring-boot-dependencies.version>2.7.18</spring-boot-dependencies.version>
         <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <target.artifacts.directory>/tmp</target.artifacts.directory>
@@ -41,9 +46,34 @@
     <dependencies>
         <dependency>
             <groupId>io.maestro3.agent</groupId>
+            <artifactId>private-vcloud</artifactId>
+            <version>${private.vcloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.maestro3.agent</groupId>
             <artifactId>private-openstack</artifactId>
             <version>${private.openstack.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.maestro3.agent</groupId>
+            <artifactId>private-vsphere</artifactId>
+            <version>${private.vsphere.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.maestro3.agent</groupId>
+            <artifactId>private-nutanix</artifactId>
+            <version>${private.nutanix.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.maestro3.agent</groupId>
+            <artifactId>private-hyperv</artifactId>
+            <version>${private.hyperv.version}</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.maestro3.agent</groupId>-->
+<!--            <artifactId>private-opennebula</artifactId>-->
+<!--            <version>${private.opennebula.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <dependencyManagement>

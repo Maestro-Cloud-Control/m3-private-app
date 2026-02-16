@@ -22,7 +22,9 @@ import io.maestro3.sdk.internal.util.StringUtils;
 
 
 public enum ScheduleOperation {
-    MOCK("MOCK", "mockAction", "Mock action");
+    VMWARE_VDC_DESCRIBE("VMWARE", "vmwareVdcDescriber", "Describe VDC resources"),
+    VMWARE_TEMPLATES_DESCRIBE("VMWARE", "vmwareTemplatedDescriber", "Describe vApp templates"),
+    VMWARE_VM_DESCRIBE("VMWARE", "vmwareVmDescriber", "Describe VMs");
 
     private String scope;
     private String name;

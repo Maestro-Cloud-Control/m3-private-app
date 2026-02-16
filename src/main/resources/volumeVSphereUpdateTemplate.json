@@ -1,0 +1,9 @@
+{
+    "spec": {
+        "backing": {
+            "type": "VMDK_FILE",
+            "vmdk_file": "$DISK_NAME"
+        },
+        "type": "SCSI"
+    }
+}

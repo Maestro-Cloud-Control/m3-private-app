@@ -30,7 +30,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableIntegration
 @EnableMongoRepositories(basePackages = {
-    "io.maestro3.agent.dao"})
+    "io.maestro3.agent.dao",
+    "io.maestro3.agent.vsphere.dao",
+    "io.maestro3.agent.nutanix.dao",
+    "io.maestro3.agent.hyperv.dao"})
 @SpringBootApplication(exclude = {MongoDataAutoConfiguration.class})
 public class M3AgentApplication {
 

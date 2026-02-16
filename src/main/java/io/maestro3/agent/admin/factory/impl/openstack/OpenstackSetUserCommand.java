@@ -55,7 +55,7 @@ public class OpenstackSetUserCommand extends AbstractAdminCommand<UserInfoDto> {
 
     @Override
     public UserInfoDto buildRequest(SdkPrivateWizard wizard) {
-        return new UserInfoDto();
+        return new UserInfoDto();// TODO: Andreiev 8/6/2022
     }
 
     @Override

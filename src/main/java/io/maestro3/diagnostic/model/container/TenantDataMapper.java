@@ -20,6 +20,7 @@ package io.maestro3.diagnostic.model.container;
 import io.maestro3.agent.model.base.IRegion;
 import io.maestro3.agent.model.base.ITenant;
 import io.maestro3.agent.model.tenant.OpenStackTenant;
+import io.maestro3.agent.model.vdc.Organization;
 
 import java.util.Date;
 
@@ -36,6 +37,9 @@ public class TenantDataMapper {
                 .withShapes(region.getAllowedShapes())
                 .withManagementAvailable(tenant.isManagementAvailable())
                 .withLastStatusUpdate(updateDate);
+        if (tenant instanceof Organization) {
+            builder.withName(((Organization) tenant).getOrganizationName());
+        }
         if (tenant instanceof OpenStackTenant) {
             builder.withNativeName(((OpenStackTenant) tenant).getNativeName())
                     .withSecurityGroupName(((OpenStackTenant) tenant).getSecurityGroupName())

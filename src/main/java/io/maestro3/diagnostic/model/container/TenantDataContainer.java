@@ -17,10 +17,12 @@
 
 package io.maestro3.diagnostic.model.container;
 
+import io.maestro3.agent.model.VmwareShape;
 import io.maestro3.agent.model.base.PrivateCloudType;
 import io.maestro3.agent.model.base.ShapeConfig;
 import io.maestro3.agent.model.base.TenantState;
 import io.maestro3.sdk.internal.util.CollectionUtils;
+import io.maestro3.sdk.v3.model.SdkCloud;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

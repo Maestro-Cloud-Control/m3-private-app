@@ -1,0 +1,8 @@
+{
+    "spec": {
+        "cores_per_socket": 1,
+        "count": $CPU_COUNT,
+        "hot_add_enabled": true,
+        "hot_remove_enabled": true
+    }
+}

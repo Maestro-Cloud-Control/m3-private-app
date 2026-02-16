@@ -78,9 +78,9 @@ public class RabbitMqM3SdkListener {
     }
 
     @RabbitListener(
-        queues = "${private.agent.rabbit.m3api.sync.queue}",
-        containerFactory = "m3ApiListenerContainerFactory",
-        group = "rabbitListeners")
+            queues = "${private.agent.rabbit.m3api.sync.queue}",
+            containerFactory = "m3ApiListenerContainerFactory",
+            group = "rabbitListeners")
     public String receiveSyncMessage(@Payload String cryptedM3ApiActionsJson,
                                      @Headers Map<String, Object> headers) {
         return processMessage(cryptedM3ApiActionsJson, headers, configuration.getSyncQueue(), false);
@@ -88,9 +88,9 @@ public class RabbitMqM3SdkListener {
 
 
     @RabbitListener(
-        queues = "${private.agent.rabbit.m3api.async.queue}",
-        containerFactory = "m3ApiListenerContainerFactory",
-        group = "rabbitListeners")
+            queues = "${private.agent.rabbit.m3api.async.queue}",
+            containerFactory = "m3ApiListenerContainerFactory",
+            group = "rabbitListeners")
     public String receiveAsyncMessage(@Payload String cryptedM3ApiActionsJson,
                                       @Headers Map<String, Object> headers) {
         return processMessage(cryptedM3ApiActionsJson, headers, configuration.getAsyncQueue(), true);
@@ -138,13 +138,14 @@ public class RabbitMqM3SdkListener {
             IM3ApiHandler handler = getHandler(version, m3ApiAction.getType(), region);
             if (handler == null) {
                 String message = region == null ?
-                    String.format("Region %s is not configured on private agent", regionAlias)
-                    : String.format("Failed to find handler for action type '%s'", m3ApiAction.getType());
+                        String.format("Region %s is not configured on private agent", regionAlias)
+                        : String.format("Failed to find handler for action type '%s'", m3ApiAction.getType());
                 LOG.error(message);
                 return M3Result.error(m3ApiAction.getId(), message, message);
             }
             LOG.info("Received request for action {} in region {}", m3ApiAction.getType(), regionAlias);
             m3ApiResult = handler.handle(m3ApiAction);
+            LOG.info("Request {} processed", m3ApiAction.getType());
         } catch (ReadableAgentException e) {
             LOG.error("Cannot execute action", e);
             return M3Result.error(m3ApiAction.getId(), e.getMessage(), e.getMessage());
@@ -206,7 +207,7 @@ public class RabbitMqM3SdkListener {
             versionMap.put(handler.getSupportedVersion(), actionMap);
         }
         handler.getSupportedActions().forEach(
-            action -> actionMap.put(action, handler)
+                action -> actionMap.put(action, handler)
         );
     }
 }
